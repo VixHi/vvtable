@@ -8,13 +8,15 @@
 
 #import "VTableViewDataSource.h"
 #import "VBaseModel.h"
-#import "VBaseTableView.h"
 #import "UITableViewCell+vv.h"
+#import "UITableViewHeaderFooterView+vv.h"
 
 
 @interface VTableViewDataSource () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, copy) NSString *cellIdentifier;
+@property (nonatomic, copy) NSString *headerIdentifier;
+@property (nonatomic, copy) NSString *footerIdentifier;
 @property (nonatomic, strong) NSArray *dataSouce;
 
 @end
@@ -30,10 +32,20 @@
 
 #pragma mark ------^_^ 私有方法 ^_^--------
 - (id)itemAtIndexPath:(NSIndexPath *) indexPath {
+
+    VBaseModel *model = [self.dataSouce firstObject];
+     if (model.sectionArr) {
+         VBaseModel *sectionModel = self.dataSouce[indexPath.section];
+         return sectionModel.sectionArr[indexPath.row];
+     }
     return self.dataSouce[indexPath.row];
 }
 
-- (void) configure :(VBaseTableView *) tableView identifier:(NSString *) cellIdentifier {
+- (id)sectionAtIndexPath:(NSInteger) section {
+    return self.dataSouce[section];
+}
+
+- (void)register:(UITableView *) tableView identifier:(NSString *) cellIdentifier {
     
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -41,7 +53,7 @@
     [UITableViewCell registerTableView:tableView indentifier:cellIdentifier];
 }
 
-- (void) configure :(VBaseTableView *) tableView identifier:(NSString *) cellIdentifier xib:(NSString *) xibName {
+- (void)register:(UITableView *) tableView identifier:(NSString *) cellIdentifier xib:(NSString *) xibName {
     
     tableView.delegate = self;
     tableView.dataSource = self;
@@ -51,7 +63,27 @@
 
 }
 
-- (void) getDataSource: (NSArray *(^)(void)) modelArray completion: (void (^)(void)) completion {
+- (void)register :(UITableView *) tableView headerViewWithIdentifier:(NSString *) identifier {
+    self.headerIdentifier = identifier;
+    [UITableViewHeaderFooterView registerTableView:tableView indentifier:identifier];
+}
+
+- (void) register :(UITableView *) tableView headerViewWithIdentifier:(NSString *) identifier xib:(NSString *) xibName {
+    self.headerIdentifier = identifier;
+    [UITableViewHeaderFooterView registerTableView:tableView xibIndentifier:xibName];
+}
+
+- (void)register :(UITableView *) tableView footerViewWithIdentifier:(NSString *) identifier {
+    self.footerIdentifier = identifier;
+    [UITableViewHeaderFooterView registerTableView:tableView indentifier:identifier];
+}
+
+- (void) register :(UITableView *) tableView footerViewWithIdentifier:(NSString *) identifier xib:(NSString *) xibName {
+    self.footerIdentifier = identifier;
+    [UITableViewHeaderFooterView registerTableView:tableView xibIndentifier:xibName];
+}
+
+- (void)getDataSource: (NSArray *(^)(void)) modelArray completion: (void (^)(void)) completion {
     if (modelArray) {
         self.dataSouce = modelArray();
         if (completion) {
@@ -60,9 +92,21 @@
     }
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+//    NSAssert
+    VBaseModel *model = [self.dataSouce firstObject];
+    if (model.sectionArr) {
+        return self.dataSouce.count;
+    }
+    return 1;
+}
 
 #pragma mark ------^_^ tableViewDelegate ^_^--------
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    VBaseModel *model = [self.dataSouce firstObject];
+     if (model.sectionArr) {
+         return model.sectionArr.count;
+     }
     return self.dataSouce.count;
 }
 
@@ -72,6 +116,33 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:self.cellIdentifier forIndexPath:indexPath];
     [cell configure:cell model:item indexPath:indexPath];
     return cell;
+}
+
+//sectionHeader
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    id item = [self sectionAtIndexPath:section];
+    UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:self.headerIdentifier];
+    [headerView configure:headerView model:item indexPath:section];
+    return headerView;
+}
+
+//sectionFooter
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    id item = [self sectionAtIndexPath:section];
+    UITableViewHeaderFooterView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:self.footerIdentifier];
+    [footerView configure:footerView model:item indexPath:section];
+    return footerView;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    tableView.estimatedSectionHeaderHeight = 66;
+    return UITableViewAutomaticDimension;
+}
+
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    tableView.estimatedSectionFooterHeight = 66;
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -93,8 +164,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     VBaseModel *model = [self itemAtIndexPath:indexPath];
-    if (self.selectCellBlock) {
-        self.selectCellBlock(model, indexPath);
+    if (self.clickCellBlock) {
+        self.clickCellBlock(model, indexPath);
     }
 }
 
@@ -106,12 +177,12 @@
 }
 
 - (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_editStrs == nil) {
-        _editStrs = @[@"删除"];
+    if (_operations == nil) {
+        _operations = @[@"删除"];
     }
     NSMutableArray  *operationArr = [NSMutableArray array];
     __weak typeof(self) weakSelf = self;
-    for (NSString *str in _editStrs) {
+    for (NSString *str in _operations) {
         UITableViewRowAction *rowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:str handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
             weakSelf.editCellBlock(weakSelf.dataSouce[indexPath.row], indexPath, str);
         }];

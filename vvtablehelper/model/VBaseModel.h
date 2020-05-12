@@ -30,6 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
  !**/
 @property (nonatomic, copy) NSString  *cellText;
 
+/****
+ ★ ☆ ★
+ tabelview section下的数据源
+ 需要将模型中的数据源映射成sectionArr
+ !**/
+@property (nonatomic, strong)NSArray *sectionArr;
+
 
 
 @end

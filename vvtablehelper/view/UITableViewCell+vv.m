@@ -14,7 +14,7 @@
 @implementation UITableViewCell (vv)
 
 
-- (void) selectCellWithModel:(id) model indexPath:(NSIndexPath *) indexPath {
+- (void) clickCellWithModel:(id) model indexPath:(NSIndexPath *) indexPath {
     
 }
 
@@ -28,6 +28,7 @@
 + (void) registerTableView:(UITableView *) tableView indentifier:(NSString *) identifier {
     //通过字符串获取对应的类
     Class aClass = NSClassFromString(identifier);
+    NSAssert(aClass != nil, @"无效cellIdentifier");
     [tableView registerClass:aClass forCellReuseIdentifier:identifier];
 }
 
