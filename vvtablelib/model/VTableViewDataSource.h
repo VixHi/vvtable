@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  ※ ※ ※ ※ ※ ※ ※ ※ ★ ☆ ★ ※ ※ ※ ※ ※ ※ ※ ※
  数据源 对cell赋值
  !**/
-- (void) getDataSource: (NSArray *(^)(void)) modelArray completion: (void (^)(void)) completion;
+- (void) cellForData: (id(^)(void)) modelArray completion: (void (^)(void)) completion;
 
 /****
  ※ ※ ※ ※ ※ ※ ※ ※ ★ ☆ ★ ※ ※ ※ ※ ※ ※ ※ ※

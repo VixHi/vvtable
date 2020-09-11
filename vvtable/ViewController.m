@@ -96,18 +96,19 @@
 !**/
 
     
-    NSArray *tempModelArr = @[model, model, model];
+    NSMutableArray *tempModelArr = @[model, model, model];
     model.rows = tempModelArr;
     
     
     [self.dataArr addObject:model];
     
-    [self.datasource getDataSource:^NSArray * _Nonnull{
+    [self.datasource cellForData:^id _Nonnull{
         return self.dataArr;
     } completion:^{
         [self.tableView reloadData];
         [self endRefersh];
     }];
+
 }
 
 - (void) endRefersh {

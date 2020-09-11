@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "vvtable"
-  spec.version      = "0.1.1"
+  spec.version      = "0.1.2"
   spec.summary      = "make tableview easier ~"
 
   # This description is used to generate tags and improve search results.
@@ -91,7 +91,7 @@ Pod::Spec.new do |spec|
   #
 
   #spec.source_files  = "Classes", "Classes/**/*.{h,m}"
-  spec.source_files  = "vvtablelib/**/*.{h,m}"
+  spec.source_files  = "vvtablelib", "vvtable/vvtablelib/**/*.{h,m}"
   #spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"

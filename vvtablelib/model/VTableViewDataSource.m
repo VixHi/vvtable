@@ -67,7 +67,7 @@
     [UITableViewHeaderFooterView registerTableView:tableView indentifier:identifier];
 }
 
-- (void) getDataSource: (NSArray *(^)(void)) modelArray completion: (void (^)(void)) completion {
+- (void) cellForData: (id(^)(void)) modelArray completion: (void (^)(void)) completion {
     if (modelArray) {
         self.dataSouce = modelArray();
         if (completion) {
