@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "vvtable"
-  spec.version      = "0.1.2"
+  spec.version      = "0.1.4"
   spec.summary      = "make tableview easier ~"
 
   # This description is used to generate tags and improve search results.
