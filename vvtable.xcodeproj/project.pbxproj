@@ -265,16 +265,11 @@
 		655C967D245025DB00F04426 /* vvtablelib */ = {
 			isa = PBXGroup;
 			children = (
+				655C96852450260200F04426 /* VBaseModel.h */,
+				655C96872450260200F04426 /* VBaseModel.m */,
+				655C96862450260200F04426 /* VTableViewDataSource.h */,
+				655C96842450260200F04426 /* VTableViewDataSource.m */,
 				65271B3E24FE6FAE00B55649 /* VVTableHeader.h */,
-				655C96832450260200F04426 /* model */,
-				655C967E2450260200F04426 /* view */,
-			);
-			path = vvtablelib;
-			sourceTree = "<group>";
-		};
-		655C967E2450260200F04426 /* view */ = {
-			isa = PBXGroup;
-			children = (
 				655C96802450260200F04426 /* UITableViewCell+vv.h */,
 				655C96822450260200F04426 /* UITableViewCell+vv.m */,
 				655CDE5424690B33008D36D9 /* UITableViewHeaderFooterView+vv.h */,
@@ -282,18 +277,7 @@
 				655C967F2450260200F04426 /* VBaseTableView.h */,
 				655C96812450260200F04426 /* VBaseTableView.m */,
 			);
-			path = view;
-			sourceTree = "<group>";
-		};
-		655C96832450260200F04426 /* model */ = {
-			isa = PBXGroup;
-			children = (
-				655C96852450260200F04426 /* VBaseModel.h */,
-				655C96872450260200F04426 /* VBaseModel.m */,
-				655C96862450260200F04426 /* VTableViewDataSource.h */,
-				655C96842450260200F04426 /* VTableViewDataSource.m */,
-			);
-			path = model;
+			path = vvtablelib;
 			sourceTree = "<group>";
 		};
 		655C96A02462B3A800F04426 /* thirdparty */ = {
